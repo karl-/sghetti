@@ -20,7 +20,17 @@ namespace Shplader.Nodes
 			}
 		}
 
-		protected override List<Port> output { get { return null; } }
+		protected override List<Port> output
+		{
+			get 
+			{
+				return new List<Port>()
+				{
+					new Port("image", UniformType.Float),
+				};
+			}
+		}
+
 	}
 }
 

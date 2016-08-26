@@ -60,5 +60,18 @@ namespace Shplader.Editor
 				return _nodeTitle;
 			}
 		}
+
+		private static GUIStyle _nodePortLabel = null;
+		public static GUIStyle nodePortLabel
+		{
+			get
+			{
+				if(_nodePortLabel == null)
+				{
+					_nodePortLabel = new GUIStyle(UnityEditor.EditorStyles.label);
+				}
+				return _nodePortLabel;
+			}
+		}
 	}
 }
