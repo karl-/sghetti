@@ -23,8 +23,14 @@ namespace Shplader.Editor
 		{
 			graph.nodes = new List<Node>()
 			{
+				new Test(),
+				new Base(),
 				new Test()
 			};
+
+			graph.nodes[0].position = new Vector2(30, 40);
+			graph.nodes[1].position = new Vector2(135, 60);
+			graph.nodes[2].position = new Vector2(220, 30);
 		}
 
 		void OnGUI()
@@ -36,46 +42,65 @@ namespace Shplader.Editor
 			graphRect.height = this.position.height - (graphPad * 2);
 			Vector2 mpos = graph.ScreenToGraphPoint(e.mousePosition - graphRect.position);
 
+			GUILayout.Label("drag:" +  drag.type);
+
 			if(e.type == EventType.MouseDown)
 			{
-				Node hit;
-
-				if( GraphUtility.HitTest(graph, mpos, out hit) )
-					Selection.Add(hit, e.modifiers);
-				else
-					Selection.Clear(e.modifiers);
 			}
 			else if(e.type == EventType.MouseDrag)
 			{
-				if(!drag.active && Selection.count > 0)
+				if(drag.type == DragType.None)
 				{
 					drag.start = mpos;
-					drag.active = true;
+
+					Node hit;
+
+					if( GraphUtility.HitTest(graph, mpos, out hit) )
+					{
+						if(!Selection.nodes.Contains(hit))
+							Selection.Add(hit, e.modifiers);
+
+						drag.type = DragType.MoveNodes;
+					}
+					else
+					{
+						Selection.Clear(e.modifiers);
+						drag.type = DragType.SelectionRect;
+					}
 				}
 			}
 			else if(e.type == EventType.MouseUp)
 			{
-				if(drag.active)
+				if(drag.type == DragType.MoveNodes)
 				{
 					if(graphRect.Contains(mpos))
 					{
 						foreach(Node node in Selection.nodes)
 							node.position += (mpos - drag.start);
 					}
-
-					drag.active = false;
 				}
+				else
+				{
+					Node hit;
+
+					if( GraphUtility.HitTest(graph, mpos, out hit) )
+						Selection.Add(hit, e.modifiers);
+					else
+						Selection.Clear(e.modifiers);
+				}
+				
+				drag.type = DragType.None;
 			}
 			else if(e.type == EventType.Ignore)
 			{
-				drag.active = false;
+				drag.type = DragType.None;
 			}
 			else if(e.type == EventType.ContextClick)
 			{
 				OpenNodeMenu(mpos);
 			}
 
-			graph.Draw( graphRect, Selection.nodes, drag.active ? mpos - drag.start : Vector2.zero );
+			graph.Draw( graphRect, Selection.nodes, drag.type == DragType.MoveNodes ? mpos - drag.start : Vector2.zero );
 
 			if( e.type == EventType.MouseDown ||
 				e.type == EventType.MouseUp ||

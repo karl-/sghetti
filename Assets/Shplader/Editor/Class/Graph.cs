@@ -28,8 +28,6 @@ namespace Shplader.Editor
 				GUI.Box(r, "");
 				GraphUtility.PopBackgroundColor();
 
-				GUILayout.Label("rect: " + rect);
-
 				foreach(Node node in nodes)
 				{
 					if(selected.Contains(node))
