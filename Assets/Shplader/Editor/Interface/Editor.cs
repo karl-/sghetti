@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
-using Shplader.Nodes;
+using Shplader.Core;
+using Nodes = Shplader.Nodes;
 
 namespace Shplader.Editor
 {
@@ -23,14 +24,16 @@ namespace Shplader.Editor
 		{
 			graph.nodes = new List<Node>()
 			{
-				new Test(),
-				new Base(),
-				new Test()
+				new Nodes.Test(),
+				new Nodes.Base(),
+				new Nodes.Test()
 			};
 
 			graph.nodes[0].position = new Vector2(30, 40);
-			graph.nodes[1].position = new Vector2(135, 60);
+			graph.nodes[1].position = new Vector2(135, 120);
 			graph.nodes[2].position = new Vector2(220, 30);
+
+			Repaint();
 		}
 
 		void OnGUI()
@@ -127,8 +130,8 @@ namespace Shplader.Editor
 		{
 			GenericMenu menu = new GenericMenu();
 
-			menu.AddItem(new GUIContent("Base", ""), false, () => InsertNode(new Base(), position));
-			menu.AddItem(new GUIContent("Test", ""), false, () => InsertNode(new Test(), position));
+			menu.AddItem(new GUIContent("Base", ""), false, () => InsertNode(new Nodes.Base(), position));
+			menu.AddItem(new GUIContent("Test", ""), false, () => InsertNode(new Nodes.Test(), position));
 
 			menu.ShowAsContext();
 		}

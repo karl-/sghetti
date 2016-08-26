@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using Shplader.Nodes;
+using Shplader.Core;
 using System.Linq;
 
 namespace Shplader.Editor

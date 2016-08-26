@@ -1,5 +1,5 @@
 using UnityEngine;
-using Shplader.Nodes;
+using Shplader.Core;
 using System.Collections.Generic;
 
 namespace Shplader.Editor
