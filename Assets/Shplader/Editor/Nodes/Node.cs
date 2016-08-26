@@ -23,7 +23,7 @@ namespace Shplader.Nodes
 			rect.x = position.x + transform.offset.x;
 			rect.y = position.y + transform.offset.y;
 
-			GUI.Button(rect, "Contents", EditorStyles.nodeBackground);
+			GUI.Button(rect, name, EditorStyles.nodeBackground);
 		}
 	}
 }

@@ -11,6 +11,11 @@ namespace Shplader.Editor
 		public GraphTransform transform;
 		private Rect r = new Rect(0,0,0,0);
 
+		public Vector2 ScreenToGraphPoint(Vector2 v)
+		{
+			return new Vector2(v.x - transform.offset.x, v.y -= transform.offset.y);
+		}
+
 		public void Draw(Rect rect, HashSet<Node> selected, Vector2 drag)
 		{
 			r.width = rect.width;

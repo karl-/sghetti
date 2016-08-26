@@ -27,8 +27,18 @@ namespace Shplader.Editor
 
 		public static void Add(Node node, EventModifiers modifiers)
 		{
-			Clear(modifiers);
-			_nodes.Add(node);
+			if( IsAppendModifier(modifiers) )
+			{
+				if(_nodes.Contains(node))
+					_nodes.Remove(node);
+				else
+					_nodes.Add(node);
+			}
+			else
+			{
+				_nodes.Clear();
+				_nodes.Add(node);
+			}
 		}
 
 		public static void Clear(EventModifiers modifiers = EventModifiers.None)
