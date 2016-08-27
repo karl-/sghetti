@@ -1,6 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
-using Shplader.Editor;
+using Shplader.Editor;	// @todo decouple rendering from node
 
 namespace Shplader.Core
 {
@@ -41,7 +41,7 @@ namespace Shplader.Core
 						rect.y,
 						rect.width + ((PORT_PAD + PORT_SIZE) * 2),
 						rect.height);
-					
+
 					return full;
 				}
 
@@ -91,6 +91,19 @@ namespace Shplader.Core
 			portRect.y += (PORT_LINE_HEIGHT/2) - (PORT_SIZE / 2) + 1;
 
 			return portRect;
+		}
+
+		public int GetPortIndex(Port port)
+		{
+			int index = -1;
+
+			if(input != null)
+				index = input.IndexOf(port);
+
+			if(index < 0 && output != null)
+				index = output.IndexOf(port);
+
+			return index;
 		}
 
 		public virtual void Draw(GraphTransform transform)

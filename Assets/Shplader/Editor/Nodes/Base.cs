@@ -8,15 +8,21 @@ namespace Shplader.Nodes
 	{
 		public override string name { get { return "Base Node"; } }
 
+		private List<Port> _input, _output;
+
 		protected override List<Port> input
 		{
 			get 
 			{
-				return new List<Port>()
+				if(_input == null)
 				{
-					new Port("alpha", UniformType.Float),
-					new Port("beta", UniformType.Float)
-				};
+					_input = new List<Port>()
+					{
+						new Port("alpha", UniformType.Float),
+						new Port("beta", UniformType.Float)
+					};
+				}
+				return _input;
 			}
 		}
 
@@ -24,10 +30,14 @@ namespace Shplader.Nodes
 		{
 			get 
 			{
-				return new List<Port>()
+				if(_output == null)
 				{
-					new Port("image", UniformType.Float),
-				};
+					_output = new List<Port>()
+					{
+						new Port("image", UniformType.Float),
+					};
+				}
+				return _output;
 			}
 		}
 	}

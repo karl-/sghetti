@@ -1,4 +1,5 @@
 using UnityEngine;
+using Shplader.Core;
 
 namespace Shplader.Editor
 {
@@ -14,5 +15,15 @@ namespace Shplader.Editor
 	{
 		public DragType type = DragType.None;
 		public Vector2 start = Vector2.zero;
+
+		// used if drag is type ConnectNoodle
+		public NodeAndPort source;
+		public PortType portType;
+
+		public void Clear()
+		{
+			source = null;
+			type = DragType.None;
+		}
 	}
 }

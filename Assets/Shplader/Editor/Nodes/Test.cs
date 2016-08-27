@@ -7,17 +7,22 @@ namespace Shplader.Nodes
 	public class Test : Node
 	{
 		public override string name { get { return "Test Node"; } }
+		private List<Port> _input, _output;
 
 		protected override List<Port> input
 		{
 			get 
 			{
-				return new List<Port>()
+				if(_input == null)
 				{
-					new Port("transparency", UniformType.Float),
-					new Port("amplitude", UniformType.Float),
-					new Port("raditude", UniformType.Float)
-				};
+					_input = new List<Port>()
+					{
+						new Port("transparency", UniformType.Float),
+						new Port("amplitude", UniformType.Float),
+						new Port("raditude", UniformType.Float)
+					};
+				}
+				return _input;
 			}
 		}
 
@@ -25,12 +30,16 @@ namespace Shplader.Nodes
 		{
 			get 
 			{
-				return new List<Port>()
+				if(_output == null)
 				{
-					new Port("x", UniformType.Float),
-					new Port("y", UniformType.Float),
-					new Port("z", UniformType.Float),
-				};
+					_output = new List<Port>()
+					{
+						new Port("x", UniformType.Float),
+						new Port("y", UniformType.Float),
+						new Port("z", UniformType.Float),
+					};
+				}
+				return _output;
 			}
 		}
 	}

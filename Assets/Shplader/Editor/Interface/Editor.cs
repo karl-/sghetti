@@ -65,10 +65,18 @@ namespace Shplader.Editor
 
 					if( GraphUtility.HitTest(graph, mpos, out hit) )
 					{
-						if(!Selection.nodes.Contains(hit.node))
-							Selection.Add(hit.node, e.modifiers);
-
-						drag.type = DragType.MoveNodes;
+						if(hit.port != null)
+						{
+							drag.source = new NodeAndPort(hit.node, hit.port);
+							drag.portType = hit.portType;
+							drag.type = DragType.ConnectNoodle;
+						}
+						else
+						{
+							if(!Selection.nodes.Contains(hit.node))
+								Selection.Add(hit.node, e.modifiers);
+							drag.type = DragType.MoveNodes;
+						}
 					}
 					else
 					{
@@ -87,7 +95,25 @@ namespace Shplader.Editor
 							node.position += (mpos - drag.start);
 					}
 				}
-				else
+				else if(drag.type == DragType.ConnectNoodle)
+				{
+					NodeHit hit;
+
+					if(GraphUtility.HitTest(graph, mpos, out hit))
+					{
+						if(hit.port != null)
+						{
+							if(hit.portType != drag.portType)
+							{
+								if(drag.portType == PortType.Input)
+									graph.noodles.Add(new Noodle(drag.source, hit));
+								else
+									graph.noodles.Add(new Noodle(hit, drag.source));
+							}
+						}
+					}
+				}
+				else if(drag.type == DragType.None)
 				{
 					NodeHit hit;
 
@@ -97,11 +123,11 @@ namespace Shplader.Editor
 						Selection.Clear(e.modifiers);
 				}
 				
-				drag.type = DragType.None;
+				drag.Clear();
 			}
 			else if(e.type == EventType.Ignore)
 			{
-				drag.type = DragType.None;
+				drag.Clear();
 			}
 			else if(e.type == EventType.ContextClick)
 			{
@@ -115,6 +141,11 @@ namespace Shplader.Editor
 			}
 
 			graph.Draw( graphRect, Selection.nodes, drag.type == DragType.MoveNodes ? mpos - drag.start : Vector2.zero );
+
+			GUI.BeginGroup(graphRect);
+			if(drag.type == DragType.ConnectNoodle)
+				Noodle.Draw(drag.start, mpos);
+			GUI.EndGroup();
 
 			if( e.type == EventType.MouseDown ||
 				e.type == EventType.MouseUp ||

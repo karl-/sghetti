@@ -1,13 +1,15 @@
 using UnityEngine;
 using UnityEditor;
-using Shplader.Core;
 using System.Collections.Generic;
+using Shplader.Editor;	// @todo decouple rendering from graph & nodes
 
-namespace Shplader.Editor
+namespace Shplader.Core
 {
 	public class Graph
 	{
-		public List<Node> nodes;
+		public List<Node> nodes = new List<Node>();
+		public List<Noodle> noodles = new List<Noodle>();
+
 		public GraphTransform transform;
 		private Rect r = new Rect(0,0,0,0);
 
@@ -24,9 +26,15 @@ namespace Shplader.Editor
 			dragTransform.offset += drag;
 
 			GUI.BeginGroup(rect);
+
 				GraphUtility.PushBackgroundColor(Color.black);
 				GUI.Box(r, "");
 				GraphUtility.PopBackgroundColor();
+
+				foreach(Noodle noodle in noodles)
+				{
+					noodle.Draw(transform);
+				}
 
 				foreach(Node node in nodes)
 				{

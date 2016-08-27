@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEditor;
 using System.Collections;
 using System.Collections.Generic;
 using Shplader.Core;
@@ -38,7 +39,7 @@ namespace Shplader.Editor
 							{
 								if( node.GetPortRectAtIndex(PortType.Input, i).Contains(position) )
 								{
-									hit = new NodeHit(node, input[i]);
+									hit = new NodeHit(node, input[i], PortType.Input);
 									return true;
 								}
 							}
@@ -52,7 +53,7 @@ namespace Shplader.Editor
 							{
 								if( node.GetPortRectAtIndex(PortType.Output, i).Contains(position) )
 								{
-									hit = new NodeHit(node, output[i]);
+									hit = new NodeHit(node, output[i], PortType.Output);
 									return true;
 								}
 							}
@@ -63,6 +64,11 @@ namespace Shplader.Editor
 
 			hit = null;
 			return false;
+		}
+
+		public static void DrawLine(Vector2 left, Vector2 right)
+		{
+			Handles.DrawAAPolyLine(left, right);
 		}
 
 		private static Stack<Color> backgroundColors = new Stack<Color>();

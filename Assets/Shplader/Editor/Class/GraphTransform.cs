@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Shplader.Editor
+namespace Shplader.Core
 {
 	public struct GraphTransform
 	{
