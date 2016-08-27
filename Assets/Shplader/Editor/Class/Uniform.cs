@@ -4,10 +4,10 @@ namespace Shplader.Core
 	public enum UniformType
 	{
 		Float,
+		Int,
 		Vec2,
 		Vec3,
 		Vec4,
-		Int,
 		Texture
 	};
 

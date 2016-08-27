@@ -13,11 +13,6 @@ namespace Shplader.Core
 		public GraphTransform transform;
 		private Rect r = new Rect(0,0,0,0);
 
-		public Vector2 ScreenToGraphPoint(Vector2 v)
-		{
-			return new Vector2(v.x - transform.offset.x, v.y -= transform.offset.y);
-		}
-
 		public void Draw(Rect rect, HashSet<Node> selected, Vector2 drag)
 		{
 			r.width = rect.width;
@@ -28,8 +23,14 @@ namespace Shplader.Core
 			GUI.BeginGroup(rect);
 
 				GraphUtility.PushBackgroundColor(Color.black);
-				GUI.Box(r, "");
 				GraphUtility.PopBackgroundColor();
+
+				Handles.color = new Color(.3f, .3f, .3f, .7f);
+
+				GraphUtility.DrawLine(transform.Apply(Vector2.up * 1000),  transform.Apply(Vector2.up * -1000));
+				GraphUtility.DrawLine(transform.Apply(Vector2.right * 1000),  transform.Apply(Vector2.right * -1000));
+
+				Handles.color = Color.white;
 
 				foreach(Noodle noodle in noodles)
 				{

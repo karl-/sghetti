@@ -4,7 +4,7 @@ using Shplader.Editor;	// @todo decouple rendering from node
 
 namespace Shplader.Core
 {
-	public abstract class Node
+	public abstract class Node : ISerializable
 	{		
 		const float TITLE_HEIGHT = 18f;
 		const float PORT_SIZE = 10;
@@ -29,6 +29,11 @@ namespace Shplader.Core
 
 		public List<Port> GetInputPorts() { return new List<Port>(input); }
 		public List<Port> GetOutputPorts() { return new List<Port>(output); }
+
+		public void OnSerialize(System.Text.StringBuilder sb)
+		{
+			sb.Append(string.Format("{0}|{{{1},{2}}}", this.GetType(), position.x, position.y));
+		}
 
 		public Rect GetRect(GraphTransform transform, bool includePorts)
 		{
@@ -139,7 +144,7 @@ namespace Shplader.Core
 					portIcon.y = (portText.y + (PORT_LINE_HEIGHT/2)) - (PORT_SIZE / 2) + 1;
 
 					GUI.Label(portIcon, "", EditorStyles.nodeBackground);
-					GUI.Label(portText, port.name + "(" + port.type + ")", EditorStyles.nodePortLabel);
+					GUI.Label(portText, port.GetLabel(), EditorStyles.nodePortLabel);
 
 					portIcon.y += PORT_SIZE + PORT_PAD;
 					portText.y += PORT_LINE_HEIGHT;

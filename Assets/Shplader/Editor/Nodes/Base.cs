@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 namespace Shplader.Nodes
 {
+	[System.Serializable]
 	public class Base : Node
 	{
 		public override string name { get { return "Base Node"; } }

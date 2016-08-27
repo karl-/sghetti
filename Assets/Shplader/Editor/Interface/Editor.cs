@@ -9,6 +9,10 @@ namespace Shplader.Editor
 {
 	public class Editor : EditorWindow
 	{
+		const int MOUSE_LEFT = 0;
+		const int MOUSE_RIGHT = 1;
+		const int MOUSE_MIDDLE = 2;
+
 		Graph graph = new Graph();
 		Rect graphRect = new Rect(0,0,0,0);
 		const float graphPad = 12;
@@ -44,13 +48,21 @@ namespace Shplader.Editor
 		void OnGUI()
 		{
 			Event e = Event.current;
+			Vector2 rawMousePosition = e.mousePosition;
+			Vector2 mpos = rawMousePosition - graphRect.position;
 			graphRect.x = graphPad;
 			graphRect.y = graphPad;
 			graphRect.width = this.position.width - (graphPad * 2);
 			graphRect.height = this.position.height - (graphPad * 2);
-			Vector2 mpos = graph.ScreenToGraphPoint(e.mousePosition - graphRect.position);
 
-			GUILayout.Label(string.Join("\n", Selection.nodes.Select(x => string.Format("{0}: {1}", x.name, x.position.ToString())).ToArray()));
+			GUILayout.BeginHorizontal();
+				GUILayout.Label(string.Join("\n", Selection.nodes.Select(x => string.Format("{0}: {1}", x.name, x.position.ToString())).ToArray()));
+				GUILayout.FlexibleSpace();
+				if(GUILayout.Button("serialize"))
+				{
+					Debug.Log( GraphSerializer.Serialize(graph) );
+				}
+			GUILayout.EndHorizontal();
 
 			if(e.type == EventType.MouseDown)
 			{
@@ -59,30 +71,43 @@ namespace Shplader.Editor
 			{
 				if(drag.type == DragType.None)
 				{
-					drag.start = mpos;
-
-					NodeHit hit;
-
-					if( GraphUtility.HitTest(graph, mpos, out hit) )
+					if(e.button == MOUSE_MIDDLE)
 					{
-						if(hit.port != null)
+						drag.start = rawMousePosition;
+						drag.type = DragType.MoveCanvas;
+						drag.graphTransform = graph.transform;
+					}
+					else if(e.button == MOUSE_LEFT)
+					{					
+						drag.start = mpos;
+						NodeHit hit;
+
+						if( GraphUtility.HitTest(graph, mpos, out hit) )
 						{
-							drag.source = new NodeAndPort(hit.node, hit.port);
-							drag.portType = hit.portType;
-							drag.type = DragType.ConnectNoodle;
+							if(hit.port != null)
+							{
+								drag.source = new NodeAndPort(hit.node, hit.port);
+								drag.portType = hit.portType;
+								drag.type = DragType.ConnectNoodle;
+							}
+							else
+							{
+								if(!Selection.nodes.Contains(hit.node))
+									Selection.Add(hit.node, e.modifiers);
+								drag.type = DragType.MoveNodes;
+							}
 						}
 						else
 						{
-							if(!Selection.nodes.Contains(hit.node))
-								Selection.Add(hit.node, e.modifiers);
-							drag.type = DragType.MoveNodes;
+							Selection.Clear(e.modifiers);
+							drag.type = DragType.SelectionRect;
 						}
 					}
-					else
-					{
-						Selection.Clear(e.modifiers);
-						drag.type = DragType.SelectionRect;
-					}
+				}
+
+				if(drag.type == DragType.MoveCanvas)
+				{
+					graph.transform.offset = drag.graphTransform.offset + (rawMousePosition - drag.start);
 				}
 			}
 			else if(e.type == EventType.MouseUp)
@@ -115,12 +140,15 @@ namespace Shplader.Editor
 				}
 				else if(drag.type == DragType.None)
 				{
-					NodeHit hit;
+					if(e.button == MOUSE_LEFT)
+					{
+						NodeHit hit;
 
-					if( GraphUtility.HitTest(graph, mpos, out hit) )
-						Selection.Add(hit.node, e.modifiers);
-					else
-						Selection.Clear(e.modifiers);
+						if( GraphUtility.HitTest(graph, mpos, out hit) )
+							Selection.Add(hit.node, e.modifiers);
+						else
+							Selection.Clear(e.modifiers);
+					}
 				}
 				
 				drag.Clear();
@@ -142,10 +170,12 @@ namespace Shplader.Editor
 
 			graph.Draw( graphRect, Selection.nodes, drag.type == DragType.MoveNodes ? mpos - drag.start : Vector2.zero );
 
-			GUI.BeginGroup(graphRect);
 			if(drag.type == DragType.ConnectNoodle)
-				Noodle.Draw(drag.start, mpos);
-			GUI.EndGroup();
+			{
+				GUI.BeginGroup(graphRect);
+					Noodle.Draw(drag.start, mpos);
+				GUI.EndGroup();
+			}
 
 			if( e.type == EventType.MouseDown ||
 				e.type == EventType.MouseUp ||
@@ -175,10 +205,12 @@ namespace Shplader.Editor
 		 */
 		void OpenNodeMenu(Vector2 position)
 		{
+			Vector2 graphPos = graph.transform.Inverse(position);
+
 			GenericMenu menu = new GenericMenu();
 
-			menu.AddItem(new GUIContent("Base", ""), false, () => InsertNode(new Nodes.Base(), position));
-			menu.AddItem(new GUIContent("Test", ""), false, () => InsertNode(new Nodes.Test(), position));
+			menu.AddItem(new GUIContent("Base", ""), false, () => InsertNode(new Nodes.Base(), graphPos));
+			menu.AddItem(new GUIContent("Test", ""), false, () => InsertNode(new Nodes.Test(), graphPos));
 
 			menu.ShowAsContext();
 		}

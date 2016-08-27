@@ -8,7 +8,8 @@ namespace Shplader.Editor
 		None,
 		MoveNodes,
 		ConnectNoodle,
-		SelectionRect
+		SelectionRect,
+		MoveCanvas
 	};
 
 	public class Drag
@@ -19,6 +20,8 @@ namespace Shplader.Editor
 		// used if drag is type ConnectNoodle
 		public NodeAndPort source;
 		public PortType portType;
+
+		public GraphTransform graphTransform;
 
 		public void Clear()
 		{

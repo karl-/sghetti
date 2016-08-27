@@ -66,9 +66,12 @@ namespace Shplader.Editor
 			return false;
 		}
 
-		public static void DrawLine(Vector2 left, Vector2 right)
+		public static void DrawLine(Vector2 left, Vector2 right, bool antialias = true)
 		{
-			Handles.DrawAAPolyLine(left, right);
+			if(antialias)
+				Handles.DrawAAPolyLine(left, right);
+			else
+				Handles.DrawLine(left, right);
 		}
 
 		private static Stack<Color> backgroundColors = new Stack<Color>();

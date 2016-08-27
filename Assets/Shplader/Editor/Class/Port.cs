@@ -15,7 +15,7 @@ namespace Shplader.Core
 
 		public string GetLabel()
 		{
-			return string.Format("{0} ({1})", name, type);
+			return string.Format("{0} ({1})", name, type.ToString().ToLower());
 		}
 
 		public bool Equals(Port other)
