@@ -7,8 +7,8 @@ namespace Shplader.Core
 	public abstract class Node
 	{		
 		const float TITLE_HEIGHT = 18f;
-		const float PORT_SIZE = 8;
-		const float PORT_LINE_HEIGHT = 16;
+		const float PORT_SIZE = 10;
+		const float PORT_LINE_HEIGHT = 16;	// min 16px
 		const float PORT_PAD = 1;
 		const float NODE_PAD = 3;
 

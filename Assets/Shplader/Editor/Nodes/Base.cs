@@ -30,7 +30,6 @@ namespace Shplader.Nodes
 				};
 			}
 		}
-
 	}
 }
 

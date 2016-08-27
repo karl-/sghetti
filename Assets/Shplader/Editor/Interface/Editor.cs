@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
+using System.Linq;
 using Shplader.Core;
 using Nodes = Shplader.Nodes;
 
@@ -11,13 +12,13 @@ namespace Shplader.Editor
 		Graph graph = new Graph();
 		Rect graphRect = new Rect(0,0,0,0);
 		const float graphPad = 12;
-
 		private Drag drag = new Drag();
+		private List<Shortcut> shortcuts;
 		
 		[MenuItem("Window/Shplader")]
 		static void Init()
 		{
-			EditorWindow.GetWindow<Editor>(true, "Shplader", true);
+			EditorWindow.GetWindow<Editor>(true, "shplader", true);
 		}
 
 		void OnEnable()
@@ -32,6 +33,10 @@ namespace Shplader.Editor
 			graph.nodes[0].position = new Vector2(30, 40);
 			graph.nodes[1].position = new Vector2(135, 120);
 			graph.nodes[2].position = new Vector2(220, 30);
+
+			shortcuts = new List<Shortcut>() {
+				new Shortcut(KeyCode.Backspace, EventModifiers.FunctionKey, () => { DeleteNodes(Selection.nodes); })
+			};
 
 			Repaint();
 		}
@@ -102,6 +107,12 @@ namespace Shplader.Editor
 			{
 				OpenNodeMenu(mpos);
 			}
+			else if(e.type == EventType.KeyUp)
+			{
+				foreach(Shortcut shortcut in shortcuts)
+					if(shortcut.Equals(e.keyCode, e.modifiers))
+						shortcut.command();
+			}
 
 			graph.Draw( graphRect, Selection.nodes, drag.type == DragType.MoveNodes ? mpos - drag.start : Vector2.zero );
 
@@ -121,6 +132,11 @@ namespace Shplader.Editor
 		{
 			node.position = position;
 			graph.nodes.Add(node);
+		}
+
+		void DeleteNodes(IEnumerable<Node> nodes)
+		{
+			graph.nodes = graph.nodes.Where(x => !nodes.Contains(x)).ToList();
 		}
 
 		/**
