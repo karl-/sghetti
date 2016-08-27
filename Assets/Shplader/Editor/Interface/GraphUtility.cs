@@ -8,17 +8,56 @@ namespace Shplader.Editor
 {
 	public static class GraphUtility
 	{
-		public static bool HitTest(Graph graph, Vector2 position, out Node hit, IEnumerable<Node> mask = null)
+		public static bool HitTest(Graph graph, Vector2 position, out NodeHit hit, IEnumerable<Node> mask = null)
 		{
+			hit = null;
+
 			foreach(Node node in graph.nodes)
 			{
 				if(mask != null && mask.Contains(node))
 					continue;
 
-				if( node.GetRect(graph.transform).Contains(position) )
+				Rect fullRect = node.GetRect(graph.transform, true);
+
+				if( fullRect.Contains(position) )
 				{
-					hit = node;
-					return true;
+					Rect body = node.GetRect(graph.transform, false);
+
+					if(body.Contains(position))
+					{
+						hit = new NodeHit(node, null);
+						return true;
+					}
+					else
+					{
+						List<Port> input = node.GetInputPorts();
+
+						if(input != null)
+						{
+							for(int i = 0; i < input.Count; i++)
+							{
+								if( node.GetPortRectAtIndex(PortType.Input, i).Contains(position) )
+								{
+									hit = new NodeHit(node, input[i]);
+									return true;
+								}
+							}
+						}
+
+						List<Port> output = node.GetOutputPorts();
+
+						if(output != null)
+						{
+							for(int i = 0; i < output.Count; i++)
+							{
+								if( node.GetPortRectAtIndex(PortType.Output, i).Contains(position) )
+								{
+									hit = new NodeHit(node, output[i]);
+									return true;
+								}
+							}
+						}
+					}
 				}
 			}
 

@@ -1,6 +1,12 @@
 
 namespace Shplader.Core
 {
+	public enum PortType
+	{
+		Input,
+		Output
+	};
+
 	public class Port
 	{
 		public string name;

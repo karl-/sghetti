@@ -6,6 +6,7 @@ namespace Shplader.Editor
 	{
 		None,
 		MoveNodes,
+		ConnectNoodle,
 		SelectionRect
 	};
 

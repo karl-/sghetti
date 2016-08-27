@@ -31,8 +31,8 @@ namespace Shplader.Editor
 			};
 
 			graph.nodes[0].position = new Vector2(30, 40);
-			graph.nodes[1].position = new Vector2(135, 120);
-			graph.nodes[2].position = new Vector2(220, 30);
+			graph.nodes[1].position = new Vector2(120, 140);
+			graph.nodes[2].position = new Vector2(326, 200);
 
 			shortcuts = new List<Shortcut>() {
 				new Shortcut(KeyCode.Backspace, EventModifiers.FunctionKey, () => { DeleteNodes(Selection.nodes); })
@@ -50,7 +50,7 @@ namespace Shplader.Editor
 			graphRect.height = this.position.height - (graphPad * 2);
 			Vector2 mpos = graph.ScreenToGraphPoint(e.mousePosition - graphRect.position);
 
-			GUILayout.Label("drag:" +  drag.type);
+			GUILayout.Label(string.Join("\n", Selection.nodes.Select(x => string.Format("{0}: {1}", x.name, x.position.ToString())).ToArray()));
 
 			if(e.type == EventType.MouseDown)
 			{
@@ -61,12 +61,12 @@ namespace Shplader.Editor
 				{
 					drag.start = mpos;
 
-					Node hit;
+					NodeHit hit;
 
 					if( GraphUtility.HitTest(graph, mpos, out hit) )
 					{
-						if(!Selection.nodes.Contains(hit))
-							Selection.Add(hit, e.modifiers);
+						if(!Selection.nodes.Contains(hit.node))
+							Selection.Add(hit.node, e.modifiers);
 
 						drag.type = DragType.MoveNodes;
 					}
@@ -89,10 +89,10 @@ namespace Shplader.Editor
 				}
 				else
 				{
-					Node hit;
+					NodeHit hit;
 
 					if( GraphUtility.HitTest(graph, mpos, out hit) )
-						Selection.Add(hit, e.modifiers);
+						Selection.Add(hit.node, e.modifiers);
 					else
 						Selection.Clear(e.modifiers);
 				}

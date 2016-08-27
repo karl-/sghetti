@@ -12,15 +12,42 @@ namespace Shplader.Core
 		const float PORT_PAD = 1;
 		const float NODE_PAD = 3;
 
-		public Vector2 position;
+		private Vector2 _position;
+
+		public Vector2 position
+		{
+			get { return _position; }
+			set { _position = value; dirty = true; }
+		}
+
+		private bool dirty = false;
 		private Rect rect = new Rect(24,24,128,32);
 
 		public abstract string name { get; }
 		protected virtual List<Port> input { get { return null; } }
 		protected virtual List<Port> output { get { return null; } }
 
-		public Rect GetRect(GraphTransform transform)
+		public List<Port> GetInputPorts() { return new List<Port>(input); }
+		public List<Port> GetOutputPorts() { return new List<Port>(output); }
+
+		public Rect GetRect(GraphTransform transform, bool includePorts)
 		{
+			if(!dirty)
+			{
+				if(includePorts)
+				{
+					Rect full = new Rect(
+						rect.x - (PORT_PAD + PORT_SIZE),
+						rect.y,
+						rect.width + ((PORT_PAD + PORT_SIZE) * 2),
+						rect.height);
+					
+					return full;
+				}
+
+				return rect;
+			}
+
 			rect.x = position.x + transform.offset.x;
 			rect.y = position.y + transform.offset.y;
 
@@ -43,12 +70,32 @@ namespace Shplader.Core
 			rect.width = width;
 			rect.height = height;
 
+			if(includePorts)
+			{
+				rect.x -= (PORT_PAD + PORT_SIZE);
+				rect.width += (PORT_PAD + PORT_SIZE) * 2;
+			}
+
 			return rect;
+		}
+
+		public Rect GetPortRectAtIndex(PortType io, int index)
+		{
+			Rect portRect = new Rect(
+				io == PortType.Input ? rect.x - PORT_SIZE - PORT_PAD : rect.x + rect.width + PORT_PAD,
+				rect.y + TITLE_HEIGHT + PORT_PAD,
+				PORT_SIZE,
+				PORT_SIZE);
+
+			portRect.y += index * PORT_LINE_HEIGHT;
+			portRect.y += (PORT_LINE_HEIGHT/2) - (PORT_SIZE / 2) + 1;
+
+			return portRect;
 		}
 
 		public virtual void Draw(GraphTransform transform)
 		{
-			rect = GetRect(transform);
+			rect = GetRect(transform, false);
 
 			GUI.Label(rect, "", EditorStyles.nodeBackground);
 
