@@ -27,6 +27,11 @@ namespace Shplader.Core
 			return o;
 		}
 
+		public object Deserialize(JsonObject o)
+		{
+			return null;
+		}
+
 		public void Draw(GraphTransform transform)
 		{
 			int leftIndex = source.node.GetPortIndex(source.port);

@@ -47,6 +47,11 @@ namespace Shplader.Core
 			return o;
 		}
 
+		public object Deserialize(JsonObject o)
+		{
+			return null;
+		}
+
 		public Rect GetRect(GraphTransform transform, bool includePorts)
 		{
 			if(!dirty)

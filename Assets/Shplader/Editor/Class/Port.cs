@@ -22,6 +22,11 @@ namespace Shplader.Core
 			return o;
 		}
 
+		public object Deserialize(JsonObject o)
+		{
+			return null;
+		}
+
 		public string GetLabel()
 		{
 			return string.Format("{0} ({1})", name, type.ToString().ToLower());

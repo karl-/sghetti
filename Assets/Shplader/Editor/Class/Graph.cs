@@ -24,6 +24,11 @@ namespace Shplader.Core
 			return o;
 		}
 
+		public object Deserialize(JsonObject o)
+		{
+			return new Graph();
+		}
+
 		public void Draw(Rect rect, HashSet<Node> selected, Vector2 drag)
 		{
 			r.width = rect.width;

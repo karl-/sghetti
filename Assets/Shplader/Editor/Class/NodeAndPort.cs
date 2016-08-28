@@ -21,6 +21,11 @@ namespace Shplader.Core
 			return o;
 		}
 
+		public object Deserialize(JsonObject o)
+		{
+			return null;
+		}
+
 		public override string ToString()
 		{
 			return string.Format("{0}: {1}",
