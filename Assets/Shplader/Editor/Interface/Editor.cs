@@ -18,7 +18,7 @@ namespace Shplader.Editor
 		const float graphPad = 12;
 		private Drag drag = new Drag();
 		private List<Shortcut> shortcuts;
-		
+
 		[MenuItem("Window/Shplader")]
 		static void Init()
 		{
@@ -69,14 +69,14 @@ namespace Shplader.Editor
 			{
 				if(drag.type == DragType.None)
 				{
-					if(e.button == MOUSE_MIDDLE)
+					if(e.button == MOUSE_MIDDLE || (e.button == MOUSE_LEFT && e.modifiers == EventModifiers.Alt))
 					{
 						drag.start = rawMousePosition;
 						drag.type = DragType.MoveCanvas;
 						drag.graphTransform = graph.transform;
 					}
 					else if(e.button == MOUSE_LEFT)
-					{					
+					{
 						drag.start = mpos;
 						NodeHit hit;
 
@@ -148,7 +148,7 @@ namespace Shplader.Editor
 							Selection.Clear(e.modifiers);
 					}
 				}
-				
+
 				drag.Clear();
 			}
 			else if(e.type == EventType.Ignore)
@@ -186,7 +186,7 @@ namespace Shplader.Editor
 				e.type == EventType.DragExited )
 				Repaint();
 		}
-		
+
 		void InsertNode(Node node, Vector2 position)
 		{
 			node.position = position;
