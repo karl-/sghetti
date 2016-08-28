@@ -27,9 +27,9 @@ namespace Shplader.Core
 			return o;
 		}
 
-		public object Deserialize(JsonObject o)
+		public void Deserialize(JsonObject o)
 		{
-			return null;
+			Debug.Log("@todo");
 		}
 
 		public void Draw(GraphTransform transform)

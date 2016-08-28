@@ -21,9 +21,9 @@ namespace Shplader.Core
 			return o;
 		}
 
-		public object Deserialize(JsonObject o)
+		public void Deserialize(JsonObject o)
 		{
-			return null;
+			UnityEngine.Debug.Log("@todo");
 		}
 
 		public override string ToString()

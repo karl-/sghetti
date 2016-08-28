@@ -21,6 +21,7 @@ ExportedObj/
 
 # Debug stuff
 Assets/Bugger*
+Assets/Debug*
 
 # Unity3D generated meta files
 *.pidb.meta

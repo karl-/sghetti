@@ -18,15 +18,17 @@ namespace Shplader.Core
 		{
 			JsonObject o = new JsonObject();
 
-			o["nodes"] = SerializationUtil.GetJsonArray(nodes);
-			o["noodles"] = SerializationUtil.GetJsonArray(noodles);
+			o["transform"] = transform.Serialize();
+			o["nodes"] = SerializationUtil.SerializeList(nodes);
+			o["noodles"] = SerializationUtil.SerializeList(noodles);
 
 			return o;
 		}
 
-		public object Deserialize(JsonObject o)
+		public void Deserialize(JsonObject o)
 		{
-			return new Graph();
+			transform = Serializer.Deserialize<GraphTransform>( (JsonObject) o["transform"] );
+			nodes = Serializer.DeserializeList<Node>( (JsonArray) o["nodes"]);
 		}
 
 		public void Draw(Rect rect, HashSet<Node> selected, Vector2 drag)
@@ -67,6 +69,19 @@ namespace Shplader.Core
 					}
 				}
 			GUI.EndGroup();
+		}
+
+		public override string ToString()
+		{
+			System.Text.StringBuilder sb = new System.Text.StringBuilder();
+
+			sb.AppendLine("transform: " + transform.ToString());
+			sb.AppendLine("nodes:");
+
+			foreach(Node node in nodes)
+				sb.AppendLine(string.Format("  {0} [{1}]", node.name, node.GetType()));
+
+			return sb.ToString();
 		}
 	}
 }

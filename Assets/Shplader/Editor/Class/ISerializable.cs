@@ -11,6 +11,6 @@ namespace Shplader.Core
 		 *	Provide unto the serializer a valid object or be punished.
 		 */
 		JsonObject Serialize();
-		object Deserialize(JsonObject o);
+		void Deserialize(JsonObject o);
 	}
 }

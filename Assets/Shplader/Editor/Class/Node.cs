@@ -41,15 +41,15 @@ namespace Shplader.Core
 		public JsonObject Serialize()
 		{
 			JsonObject o = new JsonObject();
-			o["_type"] = this.GetType().ToString();
-			o["_id"] = id;
-			o["_position"] = SerializationUtil.Serialize(_position);
+			o["_type"] = Serializer.Serialize(this.GetType().ToString());
+			o["_id"] = Serializer.Serialize(id);
+			o["_position"] = Serializer.Serialize(_position);
 			return o;
 		}
 
-		public object Deserialize(JsonObject o)
+		public void Deserialize(JsonObject o)
 		{
-			return null;
+			_position = Serializer.DeserializeUnityType<Vector2>( (JsonObject) o["_position"] );
 		}
 
 		public Rect GetRect(GraphTransform transform, bool includePorts)
