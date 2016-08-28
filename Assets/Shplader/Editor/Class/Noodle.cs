@@ -1,13 +1,14 @@
 using UnityEngine;
 using UnityEditor;
 using Shplader.Editor;
+using SimpleJson;
 
 namespace Shplader.Core
 {
 	/**
 	 *	Connect two ports.
 	 */
-	public class Noodle
+	public class Noodle : ISerializable
 	{
 		public NodeAndPort source;
 		public NodeAndPort destination;
@@ -16,6 +17,14 @@ namespace Shplader.Core
 		{
 			this.source = src;
 			this.destination = dest;
+		}
+
+		public JsonObject Serialize()
+		{
+			JsonObject o = new JsonObject();
+			o["_source"] = source.Serialize();
+			o["_destination"] = destination.Serialize();
+			return o;
 		}
 
 		public void Draw(GraphTransform transform)

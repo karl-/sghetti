@@ -1,6 +1,8 @@
+using SimpleJson;
+
 namespace Shplader.Core
 {
-	public class NodeAndPort
+	public class NodeAndPort : ISerializable
 	{
 		public Node node;
 		public Port port;
@@ -9,6 +11,14 @@ namespace Shplader.Core
 		{
 			this.node = node;
 			this.port = port;
+		}
+
+		public JsonObject Serialize()
+		{
+			JsonObject o = new JsonObject();
+			o["_node"] = node.id;
+			o["_port"] = port.Serialize();
+			return o;
 		}
 
 		public override string ToString()

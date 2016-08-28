@@ -59,9 +59,7 @@ namespace Shplader.Editor
 				GUILayout.Label(string.Join("\n", Selection.nodes.Select(x => string.Format("{0}: {1}", x.name, x.position.ToString())).ToArray()));
 				GUILayout.FlexibleSpace();
 				if(GUILayout.Button("serialize"))
-				{
-					Debug.Log( GraphSerializer.Serialize(graph) );
-				}
+					Debug.Log( Serializer.Serialize(graph) );
 			GUILayout.EndHorizontal();
 
 			if(e.type == EventType.MouseDown)

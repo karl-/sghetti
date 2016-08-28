@@ -2,16 +2,27 @@ using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
 using Shplader.Editor;	// @todo decouple rendering from graph & nodes
+using SimpleJson;
 
 namespace Shplader.Core
 {
-	public class Graph
+	public class Graph : ISerializable
 	{
 		public List<Node> nodes = new List<Node>();
 		public List<Noodle> noodles = new List<Noodle>();
 
 		public GraphTransform transform;
 		private Rect r = new Rect(0,0,0,0);
+
+		public JsonObject Serialize()
+		{
+			JsonObject o = new JsonObject();
+
+			o["nodes"] = SerializationUtil.GetJsonArray(nodes);
+			o["noodles"] = SerializationUtil.GetJsonArray(noodles);
+
+			return o;
+		}
 
 		public void Draw(Rect rect, HashSet<Node> selected, Vector2 drag)
 		{

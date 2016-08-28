@@ -1,4 +1,5 @@
 using System;
+using SimpleJson;
 
 namespace Shplader.Core
 {
@@ -8,10 +9,18 @@ namespace Shplader.Core
 		Output
 	};
 
-	public class Port : IEquatable<Port>
+	public class Port : IEquatable<Port>, ISerializable
 	{
 		public string name;
 		public UniformType type;
+
+		public JsonObject Serialize()
+		{
+			JsonObject o = new JsonObject();
+			o["_name"] = name;
+			o["_type"] = (int) type;
+			return o;
+		}
 
 		public string GetLabel()
 		{

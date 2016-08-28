@@ -1,9 +1,15 @@
-using System.Text;
+using SimpleJson;
 
 namespace Shplader.Core
 {
+	/**
+	 *	@todo
+	 */
 	public interface ISerializable
 	{
-		void OnSerialize(StringBuilder stringBuilder);
+		/**
+		 *	Provide unto the serializer a valid object or be punished.
+		 */
+		JsonObject Serialize();
 	}
 }

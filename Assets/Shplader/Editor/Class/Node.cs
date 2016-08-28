@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using Shplader.Editor;	// @todo decouple rendering from node
+using SimpleJson;
 
 namespace Shplader.Core
 {
@@ -13,6 +14,8 @@ namespace Shplader.Core
 		const float NODE_PAD = 3;
 
 		private Vector2 _position;
+		private string _id = null;
+		public string id { get { return _id; } }
 
 		public Vector2 position
 		{
@@ -30,9 +33,18 @@ namespace Shplader.Core
 		public List<Port> GetInputPorts() { return new List<Port>(input); }
 		public List<Port> GetOutputPorts() { return new List<Port>(output); }
 
-		public void OnSerialize(System.Text.StringBuilder sb)
+		public Node()
 		{
-			sb.Append(string.Format("{0}|{{{1},{2}}}", this.GetType(), position.x, position.y));
+			_id = System.Guid.NewGuid().ToString("B");
+		}
+
+		public JsonObject Serialize()
+		{
+			JsonObject o = new JsonObject();
+			o["_type"] = this.GetType().ToString();
+			o["_id"] = id;
+			o["_position"] = SerializationUtil.Serialize(_position);
+			return o;
 		}
 
 		public Rect GetRect(GraphTransform transform, bool includePorts)
