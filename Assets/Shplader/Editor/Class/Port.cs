@@ -24,7 +24,8 @@ namespace Shplader.Core
 
 		public void Deserialize(JsonObject o)
 		{
-			UnityEngine.Debug.Log("@todo");
+			name = Serializer.Deserialize<string>(o["_name"]);
+			type = (UniformType) Serializer.Deserialize<int>(o["_type"]);
 		}
 
 		public string GetLabel()

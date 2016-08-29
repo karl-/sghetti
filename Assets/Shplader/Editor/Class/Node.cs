@@ -14,8 +14,8 @@ namespace Shplader.Core
 		const float NODE_PAD = 3;
 
 		private Vector2 _position;
-		private string _id = null;
-		public string id { get { return _id; } }
+		private Uuid _id;
+		public Uuid id { get { return _id; } }
 
 		public Vector2 position
 		{
@@ -35,7 +35,7 @@ namespace Shplader.Core
 
 		public Node()
 		{
-			_id = System.Guid.NewGuid().ToString("B");
+			_id = Uuid.NewUuid();
 		}
 
 		public JsonObject Serialize()
