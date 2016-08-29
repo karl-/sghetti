@@ -44,7 +44,34 @@ namespace Shplader.Core
 			return null;
 		}
 
-		public static T Deserialize<T>(JsonObject obj) where T : ISerializable
+		public static T Deserialize<T>(object obj)
+		{
+			if( SerializationUtil.IsPrimitive(typeof(T)) )
+				return SerializationUtil.AsType<T>(obj);
+
+			JsonObject o = obj as JsonObject;
+
+			if(obj != null)
+				return DeserializeJson<T>(o);
+
+			UnityEngine.Debug.LogWarning(string.Format("Failed deserializing object: {0}", (obj == null ? "null" : obj.ToString())));
+
+			return default(T);
+		}
+
+		private static T DeserializeJson<T>(JsonObject obj)
+		{
+			if( typeof(ISerializable).IsAssignableFrom(typeof(T)) )
+				return DeserializeISerializable<T>(obj);
+			else if( SerializationUtil.IsUnityType(typeof(T)))
+				return DeserializeUnityType<T>(obj);
+
+			Debug.Log(string.Format("Failed deserializing object: {0}", (obj == null ? "null" : obj.ToString())));
+
+			return default(T);
+		}
+
+		private static T DeserializeISerializable<T>(JsonObject obj)
 		{
 			object _type;
 			Type type = typeof(T);
@@ -65,13 +92,12 @@ namespace Shplader.Core
 				}
 			}
 
-			T instance = (T) Activator.CreateInstance(type);
+			ISerializable instance = (ISerializable) Activator.CreateInstance(type);
 			instance.Deserialize(obj);
-
-			return instance;
+			return (T) instance;
 		}
 
-		public static T DeserializeUnityType<T>(JsonObject o)
+		private static T DeserializeUnityType<T>(JsonObject o)
 		{
 			System.Func<JsonObject, object> deserializer = null;
 
@@ -91,9 +117,7 @@ namespace Shplader.Core
 			List<T> objs = new List<T>();
 
 			foreach(JsonObject o in (List<object>) array)
-			{
 				objs.Add( Deserialize<T>(o) );
-			}
 
 			return objs;
 		}

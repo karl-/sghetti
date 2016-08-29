@@ -27,7 +27,7 @@ namespace Shplader.Core
 
 		public void Deserialize(JsonObject o)
 		{
-			transform = Serializer.Deserialize<GraphTransform>( (JsonObject) o["transform"] );
+			transform = Serializer.Deserialize<GraphTransform>( o["transform"] );
 			nodes = Serializer.DeserializeList<Node>( (JsonArray) o["nodes"]);
 		}
 

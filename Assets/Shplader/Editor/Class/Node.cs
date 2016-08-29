@@ -49,7 +49,7 @@ namespace Shplader.Core
 
 		public void Deserialize(JsonObject o)
 		{
-			_position = Serializer.DeserializeUnityType<Vector2>( (JsonObject) o["_position"] );
+			_position = Serializer.Deserialize<Vector2>( o["_position"] );
 		}
 
 		public Rect GetRect(GraphTransform transform, bool includePorts)

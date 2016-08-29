@@ -25,8 +25,8 @@ namespace Shplader.Core
 
 		public void Deserialize(JsonObject o)
 		{
-			offset = Serializer.DeserializeUnityType<Vector2>((JsonObject) o["offset"]);
-			scale = SerializationUtil.AsFloat(o["scale"]);
+			offset = Serializer.Deserialize<Vector2>(o["offset"]);
+			scale = Serializer.Deserialize<float>(o["scale"]);
 		}
 
 		public GraphTransform(GraphTransform transform)
@@ -47,7 +47,7 @@ namespace Shplader.Core
 
 		public override string ToString()
 		{
-			return string.Format("{0:2}", offset);
+			return string.Format("translate: {0:2}\nscale: {1}", offset, scale);
 		}
 	}
 }

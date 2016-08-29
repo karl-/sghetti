@@ -51,12 +51,12 @@ namespace Shplader.Core
 
 		public static object DeserializeVector2(JsonObject o)
 		{
-			return new Vector2(AsFloat(o["x"]), AsFloat(o["y"]));
+			return new Vector2(AsType<float>(o["x"]), AsType<float>(o["y"]));
 		}
 
 		public static object DeserializeVector3(JsonObject o)
 		{
-			return new Vector3(AsFloat(o["x"]), AsFloat(o["y"]), AsFloat(o["z"]));
+			return new Vector3(AsType<float>(o["x"]), AsType<float>(o["y"]), AsType<float>(o["z"]));
 		}
 
 		public static JsonArray SerializeList<T>(IEnumerable<T> list) where T : ISerializable
@@ -69,28 +69,18 @@ namespace Shplader.Core
 			return arr;
 		}
 
-		public static float AsInt(object o)
+		public static T AsType<T>(object o)
 		{
-			double d = (double) o;
-			return (int) d;
-		}
-
-		public static float AsFloat(object o)
-		{
-			if( o is Int64 )
+			try
 			{
-				Int64 d = (Int64) o;
-				return (float) d;
+				var res = Convert.ChangeType(o, typeof(T));
+				return (T) res;
 			}
-			else if( o is double)
+			catch 
 			{
-				double d = (double) o;
-				return (float) d;
+				Debug.LogError(string.Format("Cannot cast {0} to {1}.", o != null ? o.GetType().ToString() : "null", typeof(T)));
+				return default(T);
 			}
-
-			Debug.LogError(string.Format("Cannot cast {0} to float.", o != null ? o.GetType().ToString() : "null"));
-
-			return (float) 0f;
 		}
 	}
 }
