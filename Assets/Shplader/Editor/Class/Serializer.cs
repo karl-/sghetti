@@ -14,9 +14,9 @@ namespace Shplader.Core
 			{
 				return null;
 			}
-			else if(typeof(ISerializable).IsAssignableFrom(target.GetType()))
+			else if(typeof(Serializable).IsAssignableFrom(target.GetType()))
 			{
-				return ((ISerializable)target).Serialize();
+				return ((Serializable)target).Serialize();
 			}
 			else if( SerializationUtil.IsPrimitive(target.GetType()) )
 			{
@@ -28,6 +28,16 @@ namespace Shplader.Core
 			}
 
 			return null;
+		}
+
+		public static JsonArray SerializeList<T>(IEnumerable<T> list) where T : Serializable
+		{
+			JsonArray arr = new JsonArray();
+
+			foreach(T i in list)
+				arr.Add(i.Serialize());
+
+			return arr;
 		}
 
 		private static JsonObject SerializeUnityType(object target)
@@ -61,8 +71,8 @@ namespace Shplader.Core
 
 		private static T DeserializeJson<T>(JsonObject obj)
 		{
-			if( typeof(ISerializable).IsAssignableFrom(typeof(T)) )
-				return DeserializeISerializable<T>(obj);
+			if( typeof(Serializable).IsAssignableFrom(typeof(T)) )
+				return DeserializeSerializable<T>(obj);
 			else if( SerializationUtil.IsUnityType(typeof(T)))
 				return DeserializeUnityType<T>(obj);
 
@@ -71,7 +81,7 @@ namespace Shplader.Core
 			return default(T);
 		}
 
-		private static T DeserializeISerializable<T>(JsonObject obj)
+		private static T DeserializeSerializable<T>(JsonObject obj)
 		{
 			object _type;
 			Type type = typeof(T);
@@ -92,9 +102,14 @@ namespace Shplader.Core
 				}
 			}
 
-			ISerializable instance = (ISerializable) Activator.CreateInstance(type);
-			instance.Deserialize(obj);
-			return (T) instance;
+			T instance = (T) Activator.CreateInstance(type);
+
+			MethodInfo mi = typeof(T).GetMethod("Deserialize");
+
+			if(mi != null)
+				mi.Invoke(instance, new object[] { obj });
+			
+			return instance;
 		}
 
 		private static T DeserializeUnityType<T>(JsonObject o)
@@ -109,7 +124,7 @@ namespace Shplader.Core
 			return default(T);
 		}
 
-		public static List<T> DeserializeList<T>(JsonArray array) where T : ISerializable
+		public static List<T> DeserializeList<T>(JsonArray array) where T : Serializable
 		{
 			if(array == null)
 				return null;

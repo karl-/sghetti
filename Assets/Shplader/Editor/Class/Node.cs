@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using System.Collections.Generic;
 using Shplader.Editor;	// @todo decouple rendering from node
@@ -5,7 +6,7 @@ using SimpleJson;
 
 namespace Shplader.Core
 {
-	public abstract class Node : ISerializable
+	public abstract class Node : Serializable
 	{		
 		const float TITLE_HEIGHT = 18f;
 		const float PORT_SIZE = 10;
@@ -14,8 +15,8 @@ namespace Shplader.Core
 		const float NODE_PAD = 3;
 
 		private Vector2 _position;
-		private Uuid _id;
-		public Uuid id { get { return _id; } }
+		private Guid _id;
+		public Guid id { get { return _id; } }
 
 		public Vector2 position
 		{
@@ -35,19 +36,17 @@ namespace Shplader.Core
 
 		public Node()
 		{
-			_id = Uuid.NewUuid();
+			_id = Guid.NewGuid();
 		}
 
-		public JsonObject Serialize()
+		public override void OnSerialize(JsonObject o)
 		{
-			JsonObject o = new JsonObject();
 			o["_type"] = Serializer.Serialize(this.GetType().ToString());
 			o["_id"] = Serializer.Serialize(id);
 			o["_position"] = Serializer.Serialize(_position);
-			return o;
 		}
 
-		public void Deserialize(JsonObject o)
+		public override void OnDeserialize(JsonObject o)
 		{
 			_position = Serializer.Deserialize<Vector2>( o["_position"] );
 		}
@@ -189,6 +188,11 @@ namespace Shplader.Core
 					portText.y += PORT_LINE_HEIGHT;
 				}
 			}
+		}
+
+		public override string ToString()
+		{
+			return string.Format("{0} [{1}] ({2:2})", name, this.GetType(), position);
 		}
 	}
 }

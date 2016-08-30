@@ -6,36 +6,31 @@ using SimpleJson;
 
 namespace Shplader.Core
 {
-	public class Graph : ISerializable
+	public class Graph : Serializable
 	{
 		public List<Node> nodes = new List<Node>();
 		public List<Noodle> noodles = new List<Noodle>();
 
-		public GraphTransform transform;
+		[Serialize] public GraphTransform transform = new GraphTransform();
 		private Rect r = new Rect(0,0,0,0);
 
-		public JsonObject Serialize()
+		public override void OnSerialize(JsonObject o)		
 		{
-			JsonObject o = new JsonObject();
-
-			o["transform"] = transform.Serialize();
-			o["nodes"] = SerializationUtil.SerializeList(nodes);
-			o["noodles"] = SerializationUtil.SerializeList(noodles);
-
-			return o;
+			o["nodes"] = Serializer.SerializeList(nodes);
+			o["noodles"] = Serializer.SerializeList(noodles);
 		}
 
-		public void Deserialize(JsonObject o)
+		public override void OnDeserialize(JsonObject o)
 		{
-			transform = Serializer.Deserialize<GraphTransform>( o["transform"] );
 			nodes = Serializer.DeserializeList<Node>( (JsonArray) o["nodes"]);
+			noodles = Serializer.DeserializeList<Noodle>((JsonArray) o["noodles"]);
 		}
 
 		public void Draw(Rect rect, HashSet<Node> selected, Vector2 drag)
 		{
 			r.width = rect.width;
 			r.height = rect.height;
-			GraphTransform dragTransform = transform;
+			GraphTransform dragTransform = new GraphTransform(transform);
 			dragTransform.offset += drag;
 
 			GUI.BeginGroup(rect);
@@ -79,7 +74,7 @@ namespace Shplader.Core
 			sb.AppendLine("nodes:");
 
 			foreach(Node node in nodes)
-				sb.AppendLine(string.Format("  {0} [{1}]", node.name, node.GetType()));
+				sb.AppendLine(node.ToString());
 
 			return sb.ToString();
 		}

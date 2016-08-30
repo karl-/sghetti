@@ -1,8 +1,9 @@
+using System;
 using SimpleJson;
 
 namespace Shplader.Core
 {
-	public class NodeAndPort : ISerializable
+	public class NodeAndPort : Serializable
 	{
 		private Node _node;
 
@@ -19,7 +20,7 @@ namespace Shplader.Core
 			}
 		}
 
-		public Uuid nodeId;
+		public Guid nodeId;
 		public Port port;
 
 		public NodeAndPort(Node node, Port port)
@@ -28,15 +29,13 @@ namespace Shplader.Core
 			this.port = port;
 		}
 
-		public JsonObject Serialize()
+		public override void OnSerialize(JsonObject o)
 		{
-			JsonObject o = new JsonObject();
-			o["_node"] = nodeId.Serialize();
-			o["_port"] = port.Serialize();
-			return o;
+			o["_node"] = Serializer.Serialize(nodeId);
+			o["_port"] = Serializer.Serialize(port);
 		}
 
-		public void Deserialize(JsonObject o)
+		public override void OnDeserialize(JsonObject o)
 		{
 			string nodeInstanceHash = Serializer.Deserialize<string>(o["_node"]);
 			UnityEngine.Debug.Log(nodeInstanceHash);

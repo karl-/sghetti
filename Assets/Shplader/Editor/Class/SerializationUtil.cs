@@ -17,6 +17,11 @@ namespace Shplader.Core
 			{ typeof(Vector2), DeserializeVector2 }
 		};
 
+		public static bool HasSerializableAttribute(Type type, Type attrib)
+		{
+			return Attribute.GetCustomAttribute(type, attrib) != null;
+		}
+
 		public static bool IsPrimitive(Type type)
 		{
 			if(type == null)
@@ -57,16 +62,6 @@ namespace Shplader.Core
 		public static object DeserializeVector3(JsonObject o)
 		{
 			return new Vector3(AsType<float>(o["x"]), AsType<float>(o["y"]), AsType<float>(o["z"]));
-		}
-
-		public static JsonArray SerializeList<T>(IEnumerable<T> list) where T : ISerializable
-		{
-			JsonArray arr = new JsonArray();
-
-			foreach(T i in list)
-				arr.Add(i.Serialize());
-
-			return arr;
 		}
 
 		public static T AsType<T>(object o)

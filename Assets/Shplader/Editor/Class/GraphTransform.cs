@@ -4,29 +4,21 @@ using UnityEngine;
 
 namespace Shplader.Core
 {
-	public struct GraphTransform : ISerializable
+	public class GraphTransform : Serializable
 	{
-		public Vector2 offset;
-		public float scale;
+		[Serialize] public Vector2 offset;
+		[Serialize] public float scale;
+
+		public GraphTransform()
+		{
+			offset = Vector2.zero;
+			scale = 1f;
+		}
 
 		public GraphTransform(Vector2 offset, float scale)
 		{
 			this.offset = offset;
 			this.scale = scale;
-		}
-
-		public JsonObject Serialize()
-		{
-			JsonObject o = new JsonObject();
-			o["offset"] = Serializer.Serialize(offset);
-			o["scale"] = Serializer.Serialize(scale);
-			return o;
-		}
-
-		public void Deserialize(JsonObject o)
-		{
-			offset = Serializer.Deserialize<Vector2>(o["offset"]);
-			scale = Serializer.Deserialize<float>(o["scale"]);
 		}
 
 		public GraphTransform(GraphTransform transform)

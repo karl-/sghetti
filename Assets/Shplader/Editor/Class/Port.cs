@@ -9,20 +9,18 @@ namespace Shplader.Core
 		Output
 	};
 
-	public class Port : IEquatable<Port>, ISerializable
+	public class Port : Serializable, IEquatable<Port>
 	{
 		public string name;
 		public UniformType type;
 
-		public JsonObject Serialize()
+		public override void OnSerialize(JsonObject o)
 		{
-			JsonObject o = new JsonObject();
 			o["_name"] = name;
 			o["_type"] = (int) type;
-			return o;
 		}
 
-		public void Deserialize(JsonObject o)
+		public override void OnDeserialize(JsonObject o)
 		{
 			name = Serializer.Deserialize<string>(o["_name"]);
 			type = (UniformType) Serializer.Deserialize<int>(o["_type"]);

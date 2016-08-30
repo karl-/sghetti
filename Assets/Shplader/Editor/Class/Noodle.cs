@@ -8,7 +8,7 @@ namespace Shplader.Core
 	/**
 	 *	Connect two ports.
 	 */
-	public class Noodle : ISerializable
+	public class Noodle : Serializable
 	{
 		public NodeAndPort source;
 		public NodeAndPort destination;
@@ -19,15 +19,13 @@ namespace Shplader.Core
 			this.destination = dest;
 		}
 
-		public JsonObject Serialize()
+		public override void OnSerialize(JsonObject o)
 		{
-			JsonObject o = new JsonObject();
 			o["_source"] = source.Serialize();
 			o["_destination"] = destination.Serialize();
-			return o;
 		}
 
-		public void Deserialize(JsonObject o)
+		public override void OnDeserialize(JsonObject o)
 		{
 			Debug.Log("@todo");
 		}

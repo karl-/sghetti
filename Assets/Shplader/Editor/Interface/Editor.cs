@@ -73,7 +73,7 @@ namespace Shplader.Editor
 					{
 						drag.start = rawMousePosition;
 						drag.type = DragType.MoveCanvas;
-						drag.graphTransform = graph.transform;
+						drag.graphTransform = new GraphTransform(graph.transform);
 					}
 					else if(e.button == MOUSE_LEFT)
 					{
