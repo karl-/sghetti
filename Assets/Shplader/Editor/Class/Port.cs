@@ -14,6 +14,8 @@ namespace Shplader.Core
 		public string name;
 		public UniformType type;
 
+		private Port() {}
+
 		public override void OnSerialize(JsonObject o)
 		{
 			o["_name"] = name;

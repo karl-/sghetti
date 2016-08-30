@@ -13,6 +13,8 @@ namespace Shplader.Core
 		public NodeAndPort source;
 		public NodeAndPort destination;
 
+		private Noodle() {}
+
 		public Noodle(NodeAndPort src, NodeAndPort dest)
 		{
 			this.source = src;
@@ -27,7 +29,8 @@ namespace Shplader.Core
 
 		public override void OnDeserialize(JsonObject o)
 		{
-			Debug.Log("@todo");
+			source = Serializer.Deserialize<NodeAndPort>(o["_source"]);
+			destination = Serializer.Deserialize<NodeAndPort>(o["_destination"]);
 		}
 
 		public void Draw(GraphTransform transform)

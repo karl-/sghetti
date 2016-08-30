@@ -23,6 +23,9 @@ namespace Shplader.Core
 		public Guid nodeId;
 		public Port port;
 
+		private NodeAndPort()
+		{}
+
 		public NodeAndPort(Node node, Port port)
 		{
 			this.node = node;

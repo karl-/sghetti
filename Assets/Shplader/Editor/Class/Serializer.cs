@@ -102,7 +102,7 @@ namespace Shplader.Core
 				}
 			}
 
-			T instance = (T) Activator.CreateInstance(type);
+			T instance = (T) Activator.CreateInstance(type, true);
 
 			MethodInfo mi = typeof(T).GetMethod("Deserialize");
 
