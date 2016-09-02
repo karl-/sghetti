@@ -82,7 +82,7 @@ namespace Sghetti.Editor
 					Debug.Log( graphSource );
 				}
 
-				if(GUILayout.Button("de-serialize"))
+				if(GUILayout.Button("de-serialize!"))
 				{
 					if(!string.IsNullOrEmpty(graphSource))
 					{

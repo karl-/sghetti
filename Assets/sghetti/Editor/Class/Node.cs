@@ -16,9 +16,10 @@ namespace Sghetti.Core
 
 		private Vector2 _position;
 		private Guid _id;
-		public Guid id { get { return _id; } }
 
-		public Vector2 position
+		[Serialize] public Guid id { get { return _id; } set { _id = value; } }
+
+		[Serialize] public Vector2 position
 		{
 			get { return _position; }
 			set { _position = value; dirty = true; }
@@ -41,14 +42,15 @@ namespace Sghetti.Core
 
 		public override void OnSerialize(JsonObject o)
 		{
-			o["_id"] = Serializer.Serialize(id);
-			o["_position"] = Serializer.Serialize(_position);
+			o["_type"] = this.GetType().ToString();
+			// o["_id"] = Serializer.Serialize(id);
+			// o["_position"] = Serializer.Serialize(_position);
 		}
 
 		public override void OnDeserialize(JsonObject o)
 		{
-			_id = Serializer.Deserialize<Guid>( o["_id"] );
-			_position = Serializer.Deserialize<Vector2>( o["_position"] );
+			// _id = Serializer.Deserialize<Guid>( o["_id"] );
+			// _position = Serializer.Deserialize<Vector2>( o["_position"] );
 		}
 
 		public Rect GetRect(GraphTransform transform, bool includePorts)

@@ -10,6 +10,13 @@ namespace Sghetti.Core
 	 */
 	public abstract class Serializable
 	{
+		const BindingFlags SerializeFlags = 
+			BindingFlags.Instance | 
+			BindingFlags.FlattenHierarchy |
+			BindingFlags.Static | 
+			BindingFlags.Public | 
+			BindingFlags.NonPublic;
+
 		/**
 		 *	Provide unto the serializer a valid object or be punished.
 		 */
@@ -19,12 +26,10 @@ namespace Sghetti.Core
 
 			Type type = this.GetType();
 
-			o["_type"] = type.ToString();
-
-			foreach(PropertyInfo pi in type.GetProperties().Where(x => Attribute.GetCustomAttribute(x, typeof(SerializeAttribute)) != null))
+			foreach(PropertyInfo pi in type.GetProperties(SerializeFlags).Where(x => Attribute.GetCustomAttribute(x, typeof(SerializeAttribute)) != null))
 				o[pi.Name] = Serializer.Serialize(pi.GetValue(this, BindingFlags.Public | BindingFlags.NonPublic, null, null, null));
 
-			foreach(FieldInfo fi in type.GetFields().Where(x => Attribute.GetCustomAttribute(x, typeof(SerializeAttribute)) != null))
+			foreach(FieldInfo fi in type.GetFields(SerializeFlags).Where(x => Attribute.GetCustomAttribute(x, typeof(SerializeAttribute)) != null))
 				o[fi.Name] = Serializer.Serialize(fi.GetValue(this));
 
 			OnSerialize(o);
@@ -39,7 +44,7 @@ namespace Sghetti.Core
 		{
 			Type type = this.GetType();
 
-			foreach(PropertyInfo pi in type.GetProperties().Where(x => Attribute.GetCustomAttribute(x, typeof(SerializeAttribute)) != null))
+			foreach(PropertyInfo pi in type.GetProperties(SerializeFlags).Where(x => Attribute.GetCustomAttribute(x, typeof(SerializeAttribute)) != null))
 			{
 				object value;
 
@@ -52,7 +57,7 @@ namespace Sghetti.Core
 				}
 			}
 
-			foreach(FieldInfo fi in type.GetFields().Where(x => Attribute.GetCustomAttribute(x, typeof(SerializeAttribute)) != null))
+			foreach(FieldInfo fi in type.GetFields(SerializeFlags).Where(x => Attribute.GetCustomAttribute(x, typeof(SerializeAttribute)) != null))
 			{
 				object value;
 
