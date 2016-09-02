@@ -84,8 +84,11 @@ namespace Sghetti.Editor
 
 				if(GUILayout.Button("de-serialize"))
 				{
-					JsonObject o = (JsonObject) SimpleJson.SimpleJson.DeserializeObject(graphSource);
-					graph = Serializer.Deserialize<Graph>(o);
+					if(!string.IsNullOrEmpty(graphSource))
+					{
+						JsonObject o = (JsonObject) SimpleJson.SimpleJson.DeserializeObject(graphSource);
+						graph = Serializer.Deserialize<Graph>(o);
+					}
 				}
 
 			GUILayout.EndHorizontal();
@@ -224,6 +227,7 @@ namespace Sghetti.Editor
 		void DeleteNodes(IEnumerable<Node> nodes)
 		{
 			graph.nodes = graph.nodes.Where(x => !nodes.Contains(x)).ToList();
+			graph.Refresh();
 		}
 
 		/**

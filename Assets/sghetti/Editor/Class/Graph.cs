@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
 using Sghetti.Editor;	// @todo decouple rendering from graph & nodes
+using System.Linq;
 using SimpleJson;
 
 namespace Sghetti.Core
@@ -27,6 +28,14 @@ namespace Sghetti.Core
 
 			foreach(Noodle noodle in noodles)
 				noodle.RefreshNodeReferences(nodes);
+		}
+
+		/**
+		 *	Rebuild the node and noodle connections.
+		 */
+		public void Refresh()
+		{
+			noodles = noodles.Where(x => nodes.Contains(x.source.node) && nodes.Contains(x.destination.node)).ToList();
 		}
 
 		public void Draw(Rect rect, HashSet<Node> selected, Vector2 drag)
