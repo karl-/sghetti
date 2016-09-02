@@ -1,0 +1,52 @@
+{
+	"folders":
+	[
+		{
+			"path": "sghetti",
+			"file_exclude_patterns":
+			[
+				"*.unity",
+				"*.guiskin",
+				"*.dll",
+				"*.meta",
+				"*.prefab",
+				"*.anim",
+				"*.physicMaterial",
+				"*.flare",
+				"*.cubemap",
+				"*.font",
+				"*.fontsettings",
+				"*.renderTexture",
+				"*.csproj"
+			],
+			"folder_exclude_patterns":
+			[
+				"Resources",
+			]
+		},
+		{
+			"path": "Debug",
+			"file_exclude_patterns":
+			[
+				"*.unity",
+				"*.guiskin",
+				"*.dll",
+				"*.meta",
+				"*.prefab",
+				"*.anim",
+				"*.physicMaterial",
+				"*.flare",
+				"*.cubemap",
+				"*.font",
+				"*.fontsettings",
+				"*.renderTexture",
+				"*.csproj"
+			],
+			"folder_exclude_patterns":
+			[
+				"Resources",
+			]
+		}
+
+	],
+}
