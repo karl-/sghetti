@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
-using Sghetti.Editor;	// @todo decouple rendering from graph & nodes
+using Sghetti.Editor;
 using System.Linq;
 using SimpleJson;
 

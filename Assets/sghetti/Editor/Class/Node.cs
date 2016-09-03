@@ -40,17 +40,15 @@ namespace Sghetti.Core
 			_id = Guid.NewGuid();
 		}
 
+		/**
+		 *	OnSerialize provides classes the opportunity to tack on additional
+		 *	data to the serialized object.  In this case _type is a special
+		 *	value that is read by the deserializer to help determine what kind
+		 *	of node this is.
+		 */
 		public override void OnSerialize(JsonObject o)
 		{
 			o["_type"] = this.GetType().ToString();
-			// o["_id"] = Serializer.Serialize(id);
-			// o["_position"] = Serializer.Serialize(_position);
-		}
-
-		public override void OnDeserialize(JsonObject o)
-		{
-			// _id = Serializer.Deserialize<Guid>( o["_id"] );
-			// _position = Serializer.Deserialize<Vector2>( o["_position"] );
 		}
 
 		public Rect GetRect(GraphTransform transform, bool includePorts)

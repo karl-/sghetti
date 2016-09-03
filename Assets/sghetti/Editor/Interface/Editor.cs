@@ -9,25 +9,18 @@ using SimpleJson;
 namespace Sghetti.Editor
 {
 	[System.Serializable]
-	public class Editor : EditorWindow
+	public class Editor : ScriptableObject
 	{
 		const int MOUSE_LEFT = 0;
 		const int MOUSE_RIGHT = 1;
 		const int MOUSE_MIDDLE = 2;
 
 		Graph graph = new Graph();
-		Rect graphRect = new Rect(0,0,0,0);
 		const float graphPad = 12;
 		private Drag drag = new Drag();
 		private List<Shortcut> shortcuts;
 
 		[SerializeField] string graphSource = "";
-
-		[MenuItem("Window/Sghetti")]
-		static void Init()
-		{
-			EditorWindow.GetWindow<Editor>(true, "Sghetti", true);
-		}
 
 		void OnEnable()
 		{
@@ -53,8 +46,6 @@ namespace Sghetti.Editor
 			shortcuts = new List<Shortcut>() {
 				new Shortcut(KeyCode.Backspace, EventModifiers.FunctionKey, () => { DeleteNodes(Selection.nodes); })
 			};
-
-			Repaint();
 		}
 
 		void OnDisable()
@@ -62,36 +53,36 @@ namespace Sghetti.Editor
 			graphSource = Serializer.Serialize(graph).ToString();
 		}
 
-		void OnGUI()
+		public bool DoGraph(Rect graphRect)
 		{
 			Event e = Event.current;
 			Vector2 rawMousePosition = e.mousePosition;
 			Vector2 mpos = rawMousePosition - graphRect.position;
-			graphRect.x = graphPad;
-			graphRect.y = graphPad;
-			graphRect.width = this.position.width - (graphPad * 2);
-			graphRect.height = this.position.height - (graphPad * 2);
+			// graphRect.x = graphPad;
+			// graphRect.y = graphPad;
+			// graphRect.width = this.position.width - (graphPad * 2);
+			// graphRect.height = this.position.height - (graphPad * 2);
 
-			GUILayout.BeginHorizontal();
-				GUILayout.Label(string.Join("\n", Selection.nodes.Select(x => string.Format("{0}: {1}", x.name, x.position.ToString())).ToArray()));
-				GUILayout.FlexibleSpace();
+			// GUILayout.BeginHorizontal();
+			// 	GUILayout.Label(string.Join("\n", Selection.nodes.Select(x => string.Format("{0}: {1}", x.name, x.position.ToString())).ToArray()));
+			// 	GUILayout.FlexibleSpace();
 
-				if(GUILayout.Button("serialize"))
-				{
-					graphSource = Serializer.Serialize(graph).ToString();
-					Debug.Log( graphSource );
-				}
+			// 	if(GUILayout.Button("serialize"))
+			// 	{
+			// 		graphSource = Serializer.Serialize(graph).ToString();
+			// 		Debug.Log( graphSource );
+			// 	}
 
-				if(GUILayout.Button("de-serialize!"))
-				{
-					if(!string.IsNullOrEmpty(graphSource))
-					{
-						JsonObject o = (JsonObject) SimpleJson.SimpleJson.DeserializeObject(graphSource);
-						graph = Serializer.Deserialize<Graph>(o);
-					}
-				}
+			// 	if(GUILayout.Button("de-serialize!"))
+			// 	{
+			// 		if(!string.IsNullOrEmpty(graphSource))
+			// 		{
+			// 			JsonObject o = (JsonObject) SimpleJson.SimpleJson.DeserializeObject(graphSource);
+			// 			graph = Serializer.Deserialize<Graph>(o);
+			// 		}
+			// 	}
 
-			GUILayout.EndHorizontal();
+			// GUILayout.EndHorizontal();
 
 			if(e.type == EventType.MouseDown)
 			{
@@ -215,7 +206,8 @@ namespace Sghetti.Editor
 				e.type == EventType.DragUpdated ||
 				e.type == EventType.DragPerform ||
 				e.type == EventType.DragExited )
-				Repaint();
+				return true;
+			return false;
 		}
 
 		void InsertNode(Node node, Vector2 position)
