@@ -12,7 +12,8 @@ namespace Sghetti.Shader
 		[SerializeField] 
 		private Graph.Editor editor;
 
-		private Rect graphRect;
+		private Rect settingsRect = new Rect(0, 0, 0, 0);
+		private Rect graphRect = new Rect(0, 0, 0, 0);
 
 		[MenuItem("Window/Sghetti Shader Editor")]
 		static void Init()
@@ -34,10 +35,21 @@ namespace Sghetti.Shader
 
 		void OnGUI()
 		{
+			settingsRect.x = 0f;
+			settingsRect.y = 0f;
+			settingsRect.width = 128f;
+			settingsRect.height = position.height;
+
+			GUILayout.BeginArea(settingsRect);
+
+			GUILayout.Button("compile", GUILayout.MaxWidth(128));
+
+			GUILayout.EndArea();
+
 			float graphPad = 4;
-			graphRect.x = graphPad;
+			graphRect.x = settingsRect.x + settingsRect.width + graphPad;
 			graphRect.y = graphPad;
-			graphRect.width = this.position.width - (graphPad * 2);
+			graphRect.width = (this.position.width - settingsRect.width) - (graphPad * 2);
 			graphRect.height = this.position.height - (graphPad * 2);
 
 			if( editor.DoGraph(graphRect) )

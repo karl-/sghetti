@@ -50,12 +50,7 @@ namespace Sghetti.Core
 				GraphUtility.PushBackgroundColor(Color.black);
 				GraphUtility.PopBackgroundColor();
 
-				Handles.color = new Color(.3f, .3f, .3f, .7f);
-
-				GraphUtility.DrawLine(transform.Apply(Vector2.up * 1000),  transform.Apply(Vector2.up * -1000));
-				GraphUtility.DrawLine(transform.Apply(Vector2.right * 1000),  transform.Apply(Vector2.right * -1000));
-
-				Handles.color = Color.white;
+				DrawGrid(rect.size);
 
 				foreach(Noodle noodle in noodles)
 				{
@@ -76,6 +71,30 @@ namespace Sghetti.Core
 					}
 				}
 			GUI.EndGroup();
+		}
+
+		private void DrawGrid(Vector2 size)
+		{
+			// int step = 10;
+
+			// int width = (int) Math.Ceil(size.x, step), 
+			// 	height = (int) Math.Ceil(size.y , step);
+
+			// int x = -step, y = -step;
+
+			// Vector2 start = new Vector2(x, y);
+			// Vector2 end = new Vector2(x, height);
+			
+			// Handles.color = new Color(.3f, .3f, .3f, .7f);
+
+			// while(start.x < width)
+			// {
+			// 	Handles.DrawLine(start, end);
+			// 	start.x += step;
+			// 	end.x += step;
+			// }
+
+			// Handles.color = Color.white;
 		}
 
 		public override string ToString()

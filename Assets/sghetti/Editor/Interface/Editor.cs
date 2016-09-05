@@ -58,10 +58,6 @@ namespace Sghetti.Editor
 			Event e = Event.current;
 			Vector2 rawMousePosition = e.mousePosition;
 			Vector2 mpos = rawMousePosition - graphRect.position;
-			// graphRect.x = graphPad;
-			// graphRect.y = graphPad;
-			// graphRect.width = this.position.width - (graphPad * 2);
-			// graphRect.height = this.position.height - (graphPad * 2);
 
 			// GUILayout.BeginHorizontal();
 			// 	GUILayout.Label(string.Join("\n", Selection.nodes.Select(x => string.Format("{0}: {1}", x.name, x.position.ToString())).ToArray()));
